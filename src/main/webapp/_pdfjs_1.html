@@ -37,46 +37,60 @@
         } else {
             console.log('niet geladen')
         }
-        console.log('jQuery:'+ (typeof jQuery.ajax));
-        jQuery.ajax({
-            url: "/res/d",
-            type: "GET",
-            dataType: "binary",
-            processData: false,
-            success: function(result){
-                // do something with binary data
-                console.log('ajax was ok');
-                var a = document.getElementById('viewer-frame');
-                var b = a.contentWindow.PDFViewerApplication;
-                console.log('about to open new pdf');
-                var rawLength = result.length;
-                console.log('len is '+ rawLength);
-                var array = new Uint8Array(new ArrayBuffer(rawLength));
+        // console.log('jQuery:'+ (typeof jQuery.ajax));
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/res/d', true);
+        xhr.responseType = 'arraybuffer';
 
-                for(var i = 0; i < rawLength; i++) {
-                    array[i] = result.charCodeAt(i);
-                }
-                b.open(array);
+        xhr.onload = function(e) {
+            // response is unsigned 8 bit integer
+            var responseArray = new Uint8Array(this.response);
+            var a = document.getElementById('viewer-frame');
+                    var b = a.contentWindow.PDFViewerApplication;
+            b.open(responseArray);
+                    console.log('about to open new pdf, done');
+        };
 
-                console.log('about to open new pdf, done');
-            },
-            error: function(result) {
-                console.log('faalt:');
-                var a = window.document.getElementById('viewer-frame');
-                var b = a.contentWindow.PDFViewerApplication;
-                console.log('about to open new pdf');
-                var rawLength = result.length;
-                console.log('len is '+ rawLength);
-                var array = new Uint8Array(new ArrayBuffer(rawLength));
-
-                for(var i = 0; i < rawLength; i++) {
-                    array[i] = result.charCodeAt(i);
-                }
-                b.open(array);
-
-                console.log('about to open new pdf, done');
-            }
-        });
+        xhr.send();
+        // jQuery.ajax({
+        //     url: "/res/d",
+        //     type: "GET",
+        //     dataType: "binary",
+        //     processData: false,
+        //     success: function(result){
+        //         // do something with binary data
+        //         console.log('ajax was ok');
+        //         var a = document.getElementById('viewer-frame');
+        //         var b = a.contentWindow.PDFViewerApplication;
+        //         console.log('about to open new pdf');
+        //         var rawLength = result.length;
+        //         console.log('len is '+ rawLength);
+        //         var array = new Uint8Array(new ArrayBuffer(rawLength));
+        //
+        //         for(var i = 0; i < rawLength; i++) {
+        //             array[i] = result.charCodeAt(i);
+        //         }
+        //         b.open(array);
+        //
+        //         console.log('about to open new pdf, done');
+        //     },
+        //     error: function(result) {
+        //         console.log('faalt:');
+        //         var a = window.document.getElementById('viewer-frame');
+        //         var b = a.contentWindow.PDFViewerApplication;
+        //         console.log('about to open new pdf');
+        //         var rawLength = result.length;
+        //         console.log('len is '+ rawLength);
+        //         var array = new Uint8Array(new ArrayBuffer(rawLength));
+        //
+        //         for(var i = 0; i < rawLength; i++) {
+        //             array[i] = result.charCodeAt(i);
+        //         }
+        //         b.open(array);
+        //
+        //         console.log('about to open new pdf, done');
+        //     }
+        // });
 
     }
 
