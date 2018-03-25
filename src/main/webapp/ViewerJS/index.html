@@ -141,5 +141,12 @@ c;a?(e.title||(e.title=a.replace(/^.*[\\\/]/,"")),e.documentUrl=a,b(a,function(b
             <div id = "dialogOverlay"></div>
             <div id = "blanked"></div>
         </div>
+        <script>
+                var pdfjsframe = document.getElementById('viewer');
+                pdfjsframe.onload = function() {
+                    //LoadPdfDocument();
+                    console.log('onload called')
+                };
+        </script>
     </body>
 </html>
